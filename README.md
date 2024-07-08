@@ -28,6 +28,15 @@ curl -X 'POST' \
 curl -X 'GET' \
   'http://localhost:8080/api/v1/ads/1' \
   -H 'accept: */*'
+  
+curl -X 'GET' \
+  'http://localhost:8080/api/v1/ads/1/histories?page=0' \
+  -H 'accept: */*'
+
+curl -X 'POST' \
+  'http://localhost:8080/api/v1/ads/1/3/participate' \
+  -H 'accept: */*' \
+  -d ''  
 ```
 - kotlin, spring boot, r2dbc, webflux, hexagonal(port & adapter) 기반의 광고 서비스 구현
   - 가장 최근에 주요하게 작업한 프로젝트와 비슷한 스펙으로 구현.
