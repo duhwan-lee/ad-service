@@ -1,0 +1,11 @@
+spring:
+  config:
+    activate:
+      on-profile: default
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/advertisement
+    username: user
+    password: password
+    pool:
+      max-size: 50
+      initial-size: 10

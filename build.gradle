@@ -1,0 +1,81 @@
+plugins {
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.24'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.24'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.24'
+    id 'jacoco'
+}
+
+jacoco{
+    toolVersion = "0.8.11"
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'jacoco'
+    apply plugin: 'kotlinx-serialization'
+
+    group = 'dev.duhwan.pay'
+    version = '0.0.1-SNAPSHOT'
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.jetbrains.kotlin:kotlin-reflect'
+        implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1" // JVM dependency
+        implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'io.kotest:kotest-runner-junit5-jvm:5.9.1'
+        testImplementation 'io.kotest:kotest-assertions-core:5.9.1'
+        testImplementation "io.kotest:kotest-property-jvm:5.9.1"
+        testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test'
+        testImplementation 'io.projectreactor:reactor-test'
+        testImplementation 'io.mockk:mockk:1.13.4'
+
+
+
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0'
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0'
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.8.0'
+
+        implementation 'io.github.oshai:kotlin-logging-jvm:6.0.3'
+
+    }
+}
+
+
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll '-Xjsr305=strict'
+    }
+}
+
+tasks.named('test') {
+    finalizedBy jacocoTestReport
+    useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required.set true
+        html.required.set true
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: 'io/emeraldpay/dshackle/proto/**')
+        }))
+    }
+}

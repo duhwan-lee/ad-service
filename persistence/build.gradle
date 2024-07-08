@@ -1,0 +1,48 @@
+plugins {
+	id 'org.springframework.boot' version '3.3.1'
+	id 'io.spring.dependency-management' version '1.1.5'
+	id 'org.jetbrains.kotlin.jvm' version '1.9.24'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.24'
+}
+
+group = 'dev.duhwan.pay'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+
+//	runtimeOnly 'com.h2database:h2'
+//	runtimeOnly 'io.r2dbc:r2dbc-h2'
+
+	implementation 'io.asyncer:r2dbc-mysql:1.0.5'
+	implementation project(":application")
+	implementation project(":domain")
+
+	testImplementation 'io.r2dbc:r2dbc-h2:1.0.0.RELEASE'
+	testImplementation 'io.kotest.extensions:kotest-extensions-spring:1.1.2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+}
+
+kotlin {
+	compilerOptions {
+		freeCompilerArgs.addAll '-Xjsr305=strict'
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+tasks.register('prepareKotlinBuildScriptModel') {
+}
